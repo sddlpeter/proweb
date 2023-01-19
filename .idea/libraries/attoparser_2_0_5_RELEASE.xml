@@ -1,0 +1,16 @@
+<component name="libraryTable">
+  <library name="attoparser-2.0.5.RELEASE">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/Downloads/thymeleaf/attoparser-2.0.5.RELEASE.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/thymeleaf/javassist-3.20.0-GA.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/thymeleaf/log4j-1.2.15.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/thymeleaf/ognl-3.1.26.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/thymeleaf/slf4j-api-1.7.25.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/thymeleaf/slf4j-log4j12-1.7.25.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/thymeleaf/thymeleaf-3.0.12.RELEASE.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/thymeleaf/unbescape-1.1.6.RELEASE.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

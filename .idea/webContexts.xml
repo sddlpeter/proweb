@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebContextManager">
+    <option name="state">
+      <map>
+        <entry key="file://$PROJECT_DIR$/pro10-fruit1.5-thymeleaf/web/add.html" value="file://$PROJECT_DIR$/pro10-fruit1.5-thymeleaf/web" />
+        <entry key="file://$PROJECT_DIR$/pro10-fruit1.5-thymeleaf/web/edit.html" value="file://$PROJECT_DIR$/pro10-fruit1.5-thymeleaf/web" />
+        <entry key="file://$PROJECT_DIR$/pro11-fruit1.6-pagination/web/index.html" value="file://$PROJECT_DIR$/pro11-fruit1.6-pagination/web" />
+      </map>
+    </option>
+  </component>
+</project>
