@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?>
-
-
-<!-- beans : java bean，也就是java对象 -->
-<beans>
-    <bean id="fruit" class="com.atguigu.fruit.controllers.FruitController"/>
-</beans>

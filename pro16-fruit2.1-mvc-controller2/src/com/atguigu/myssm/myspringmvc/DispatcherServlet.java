@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -69,10 +70,10 @@ public class DispatcherServlet extends ViewBaseServlet {
         }
     }
     @Override
-    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
+    protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
 
-        String servletPath = req.getServletPath();
+        String servletPath = request.getServletPath();
         servletPath = servletPath.substring(1);
         int lastDoIndex = servletPath.indexOf(".do");
         servletPath = servletPath.substring(0, lastDoIndex);
@@ -83,31 +84,58 @@ public class DispatcherServlet extends ViewBaseServlet {
 
 
         // pasted from FruitController
-        String operate = req.getParameter("operate");
+        String operate = request.getParameter("operate");
         if (StringUtil.isEmpty(operate)) {
             operate = "index";
         }
 
         // 利用反射进行调用，将FruitServlet中的反射代码，移动到中央控制器DispatcherServlet里，这样所有的Controller操作都可以从这里定义
         try {
-            Method method = controllerBeanObj.getClass().getDeclaredMethod(operate, HttpServletRequest.class, HttpServletResponse.class);
-            if (method != null) {
-                method.setAccessible(true);
-                Object returnObj =  method.invoke(controllerBeanObj, req, resp);
+            Method[] methods = controllerBeanObj.getClass().getDeclaredMethods();
+            for (Method method : methods) {
+                if (operate.equals(method.getName())) {
 
-                String methodReturnStr = (String) returnObj;
-                if (methodReturnStr.startsWith("redirect:")) {
-                    String redirectStr = methodReturnStr.substring("redirect:".length());
-                    resp.sendRedirect(redirectStr);
-                } else {
-                    super.processTemplate(methodReturnStr, req, resp);
+                    // 1. 统一获取参数
+                    Parameter[] parameters =  method.getParameters();
+                    Object[] parameterValues = new Object[parameters.length];
+
+                    for (int i = 0; i < parameters.length; i++) {
+                        Parameter parameter = parameters[i];
+                        String parameterName = parameter.getName();
+                        if ("request".equals(parameterName)) {
+                            parameterValues[i] = request;
+                        } else if ("response".equals(parameterName)) {
+                            parameterValues[i] = response;
+                        } else if ("session".equals(parameterName)) {
+                            parameterValues[i] = request.getSession();
+                        } else {
+                            String parameterValue = request.getParameter(parameterName);
+                            String typeName = parameter.getType().getName();
+
+                            Object parameterObj = parameterValue;
+                            if (parameterObj != null) {
+                                if ("java.lang.Integer".equals(typeName)) {
+                                    parameterObj = Integer.parseInt(parameterValue);
+                                }
+                            }
+                            parameterValues[i] = parameterObj;
+                        }
+                    }
+
+                    // 2. controller组件中的方法调用
+                    method.setAccessible(true);
+                    Object returnObj =  method.invoke(controllerBeanObj, parameterValues);
+
+                    String methodReturnStr = (String) returnObj;
+                    if (methodReturnStr.startsWith("redirect:")) {
+                        String redirectStr = methodReturnStr.substring("redirect:".length());
+                        response.sendRedirect(redirectStr);
+                    } else {
+                        super.processTemplate(methodReturnStr, request, response);
+                    }
                 }
-
-            } else {
-                throw new RuntimeException("operate值非法");
             }
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
+
         } catch (InvocationTargetException e) {
             throw new RuntimeException(e);
         } catch (IllegalAccessException e) {
