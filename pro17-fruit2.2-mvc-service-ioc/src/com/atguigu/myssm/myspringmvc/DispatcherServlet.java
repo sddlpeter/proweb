@@ -1,5 +1,7 @@
 package com.atguigu.myssm.myspringmvc;
 
+import com.atguigu.myssm.io.BeanFactory;
+import com.atguigu.myssm.io.ClassPathXmlApplicationContext;
 import com.atguigu.myssm.util.StringUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -28,7 +30,8 @@ import java.util.Map;
 
 @WebServlet("*.do")
 public class DispatcherServlet extends ViewBaseServlet {
-    private Map<String, Object> beanMap = new HashMap<>();
+
+    private BeanFactory beanFactory;
 
     public DispatcherServlet() {
 
@@ -36,38 +39,7 @@ public class DispatcherServlet extends ViewBaseServlet {
 
     public void init() throws ServletException {
         super.init();
-        try {
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("applicationContext.xml");
-            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-            Document document = documentBuilder.parse(inputStream);
-
-            NodeList beanNodeList =  document.getElementsByTagName("bean");
-            for (int i = 0; i < beanNodeList.getLength(); i++) {
-                Node beanNode = beanNodeList.item(i);
-                if (beanNode.getNodeType() == Node.ELEMENT_NODE) {
-                    Element beanElement = (Element) beanNode;
-                    String beanId = beanElement.getAttribute("id");
-                    String className = beanElement.getAttribute("class");
-                    Class controllerBeanClass = Class.forName(className);
-                    Object beanObj = controllerBeanClass.newInstance();
-                    beanMap.put(beanId, beanObj);
-                }
-            }
-
-        } catch (ParserConfigurationException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (SAXException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (InstantiationException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
+        beanFactory = new ClassPathXmlApplicationContext();
     }
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -80,7 +52,7 @@ public class DispatcherServlet extends ViewBaseServlet {
 
         // System.out.println(servletPath);
 
-        Object controllerBeanObj =  beanMap.get(servletPath);
+        Object controllerBeanObj =  beanFactory.getBean(servletPath);
 
 
         // pasted from FruitController
