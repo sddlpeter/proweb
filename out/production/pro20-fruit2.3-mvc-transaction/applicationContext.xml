@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!-- beans : java bean，也就是java对象 -->
+<beans>
+    <bean id="fruitDAO" class="com.atguigu.fruit.dao.impl.FruitDAOImpl"/>
+    <bean id="fruitService" class="com.atguigu.fruit.service.impl.FruitServiceImpl">
+        <property name="fruitDAO" ref="fruitDAO"/>
+    </bean>
+
+    <bean id="fruit" class="com.atguigu.fruit.controllers.FruitController">
+        <property name="fruitService" ref="fruitService"/>
+    </bean>
+</beans>
