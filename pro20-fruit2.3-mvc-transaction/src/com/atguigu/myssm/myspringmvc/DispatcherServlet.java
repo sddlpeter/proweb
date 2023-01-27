@@ -91,6 +91,8 @@ public class DispatcherServlet extends ViewBaseServlet {
                     Object returnObj =  method.invoke(controllerBeanObj, parameterValues);
 
                     String methodReturnStr = (String) returnObj;
+
+                    // 3. 视图处理
                     if (methodReturnStr.startsWith("redirect:")) {
                         String redirectStr = methodReturnStr.substring("redirect:".length());
                         response.sendRedirect(redirectStr);
