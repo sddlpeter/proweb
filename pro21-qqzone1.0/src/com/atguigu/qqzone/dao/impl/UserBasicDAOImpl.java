@@ -16,6 +16,12 @@ public class UserBasicDAOImpl extends BaseDAO<UserBasic> implements UserBasicDAO
 
     @Override
     public List<UserBasic> getUserBasicList(UserBasic userBasic) {
-        return new ArrayList<>();
+        String sql = "select fid as id from t_friend where uid = ?";
+        return super.executeQuery(sql, userBasic.getId());
+    }
+
+    @Override
+    public UserBasic getUserBasicById(Integer id) {
+        return load("select * from t_user_basic where id = ? ", id);
     }
 }

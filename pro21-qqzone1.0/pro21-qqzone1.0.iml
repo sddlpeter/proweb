@@ -19,5 +19,9 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="servlet-api" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Tomcat 8.5.84" level="application_server_libraries" />
+    <orderEntry type="library" name="mysql.connector.java" level="project" />
+    <orderEntry type="library" name="attoparser-2.0.5.RELEASE" level="project" />
   </component>
 </module>
