@@ -16,6 +16,10 @@ public class UserBasic {
 
     public UserBasic(){}
 
+    public UserBasic (Integer id) {
+        this.id = id;
+    }
+
     public Integer getId() {
         return id;
     }

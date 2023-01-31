@@ -11,6 +11,7 @@ public class TopicServiceImpl implements TopicService {
     private TopicDAO topicDAO = null;
     @Override
     public List<Topic> getTopicList(UserBasic userBasic) {
+
         return topicDAO.getTopicList(userBasic);
     }
 }
